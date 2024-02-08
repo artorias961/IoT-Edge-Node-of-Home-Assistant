@@ -1,0 +1,62 @@
+// To get started, press Ctrl+Space to bring up the completion menu and view the available nodes.
+
+// You can also use the buttons in the sidebar to perform actions on nodes.
+// Actions currently available include:
+
+// * Enabling / disabling the node
+// * Adding the bus to a bus
+// * Removing the node
+// * Connecting ADC channels
+
+// For more help, browse the DeviceTree documentation at https://docs.zephyrproject.org/latest/guides/dts/index.html
+// You can also visit the nRF DeviceTree extension documentation at https://nrfconnect.github.io/vscode-nrf-connect/devicetree/nrfdevicetree.html
+
+
+// This is for the Zephry Overlay Setup
+&i2c0{
+    // Capactive digital relatice humidity and temperature [measures temp of an external transistor] [originally was 0xbe but shifted 1 and now 0x5f] IMPLEMENTED IN CODE 
+    my_hts221: my_hts221@5f{
+        compatible = "i2c-device";
+        reg = < 0x5f >;
+        label = "MY_HTS221";
+    };
+
+    // Temperature sensor (-40C to 125C) [physcial properties] [originally was 0x94 but shifted 1 and now 0x4a] IMPLEMENTED IN CODE
+    my_stts751: my_stts751@4a{
+        compatible = "i2c-device";
+        reg = < 0x4a >;
+        label = "MY_STTS751";
+    };
+
+    // MEMs 3D Magnetometer (+-50 gauss) [orignally was 0x3c but shifted 1 and now 0x1e] IMPLEMENTED IN CODE
+    my_lis2mdl: my_lis2mdl@1e{
+        compatible = "i2c-device";
+        reg = < 0x1e >;
+        label = "MY_LIS2MDL";
+    };
+
+    // MEMs 3D Accelerometer (+-2, +-4, +-8, +-16 g) [originally was 0x30 but shifted 1 and now 0x18] IMPLEMENTED IN CODE
+    my_lis2dw12: my_lis2dw12@18{
+        compatible = "i2c-device";
+        reg = < 0x18 >;
+        label = "MY_LIS2DW12";
+    };
+
+    // MEMs pressure sensor (260-1260 hPa absolute digital output barometer)
+    my_lps22hh: my_lps22hh@5d{
+        compatible = "i2c-device";
+        reg = < 0x5d >;
+        label = "MY_LPS22HH";
+    };
+
+    //MEMS 3D Accelerometer + 3D Gyroscope
+    my_lsm6dso: my_lsm6dso@6b{
+        compatible = "i2c-device";
+        reg = < 0x6b >;
+        label = "MY_LSM6DSO";
+    };
+};
+
+
+
+

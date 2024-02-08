@@ -1,0 +1,60 @@
+<!-- Template for getting and reporting BleakScanner results -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Bleak Scanner Django Test</title>
+</head>
+<body>
+    <h1>Bleak Scanner Django Test</h1>
+    <h2>Controls</h2>
+    <label for="controls-bleak-scantime">Scan time (seconds): </label>
+    <input id="controls-bleak-scantime" type="number" size="10" min="1" max="10" value="4">
+    <input id="controls-bleak-scanrequest" type="button" value="Scan Again">
+    
+    <h2>Current Results</h2> 
+    <p>HW address: [list of service uuids]</p>
+    <ul id="list-bleak-results" style="font-family: monospace;">
+    </ul>
+
+    <script>
+        const socket_scanner = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/bleak/scan_control/'
+        );
+
+        socket_scanner.onmessage = function(e) {
+            const in_message = JSON.parse(e.data);
+            const scan_data = in_message.message;
+            const results_dom = document.querySelector("#list-bleak-results");
+            // our JSON dictioanry should look like:
+            // {
+            //     "BLE dev addr": {
+            //         "service_uuids": [uuid_here]
+            //     }                
+            // }
+            for (let hw_addr in scan_data) {
+                var li = document.createElement("li");
+                li.textContent = hw_addr + ":" + scan_data[hw_addr]
+                results_dom.appendChild(li); // ask the DOM to append this <li> to the <ul> above
+            }             
+        };
+
+        socket_scanner.onclose = function(e) {
+            console.info("Scanner socket closed");
+        };
+
+        document.querySelector('#controls-bleak-scanrequest').onclick = function(e) {
+            var scan_time = document.querySelector('#controls-bleak-scantime').value;
+            socket_scanner.send(
+                JSON.stringify({
+                    "message": "scan." + scan_time
+                })
+            );
+            alert("Sent can request for " + scan_time + " seconds!");
+        };
+    </script>
+</body>
+</html>
